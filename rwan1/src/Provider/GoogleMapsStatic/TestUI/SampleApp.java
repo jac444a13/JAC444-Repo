@@ -426,13 +426,32 @@ private void initComponents() {
   			//---- ttfZoom ----
   			ttfZoom.setText("14");
   			panel1.add(ttfZoom, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  			ttfZoom.setEditable(false);
   			
   			//---- btnZoomOut ----
   			btnZoomOut.setText("-");
+  			btnZoomOut.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					int num = Integer.parseInt(ttfZoom.getText());
+  					if(num != 0){
+  						num--;
+  					}
+  					ttfZoom.setText(Integer.toString(num));
+  				}
+  			});
   			panel1.add(btnZoomOut, new TableLayoutConstraints(4, 2, 4, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			
   			//---- btnZoomIn ----
   			btnZoomIn.setText("+");
+  			btnZoomIn.addActionListener(new ActionListener(){
+  				public void actionPerformed(ActionEvent e){
+  					int num = Integer.parseInt(ttfZoom.getText());
+  					if(num != 19){
+  						num++;
+  					}
+  					ttfZoom.setText(Integer.toString(num));
+  				}
+  			});
   			panel1.add(btnZoomIn, new TableLayoutConstraints(5, 2, 5, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   		}
   		contentPanel.add(panel1, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
