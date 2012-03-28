@@ -1,0 +1,4 @@
+Dine.To:43.680101,-79.33964
+Mandeville, Jamaica: 18.033333,-77.5
+Kingston,Jamaica:17.992731,-76.792009
+beach:23.680101,-79.33964
