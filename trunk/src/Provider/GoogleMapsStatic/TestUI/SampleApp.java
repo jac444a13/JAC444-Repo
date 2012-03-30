@@ -336,7 +336,7 @@ private void initComponents() {
   cityCombo = new JComboBox();
   savedPositionList = new JComboBox();
   btnSavePosition = new JButton();
-  txtPositionName = new JTextField(33);
+  txtPositionName = new JTextField(20);
   btnSaveDone = new JButton();
   btnSaveDone = new JButton();
   btnSavePosition = new JButton();
@@ -368,7 +368,7 @@ private void initComponents() {
   
   //--- popupWindow ----
   popupWindow =  new JDialog(this,"Enter Name For Position",true);
-  popupWindow.setSize(new Dimension(550,100));
+  popupWindow.setSize(new Dimension(400, 100));
   //Show the dialog in the middle of the screen
   popupWindow.setLocationRelativeTo(null);
   
@@ -635,10 +635,11 @@ private void initComponents() {
   						    String [] latlng = {ttfLat.getText(),ttfLon.getText()};
   						    FileWriter fstream = new FileWriter("savedpositions.txt",true);
   						    BufferedWriter out = new BufferedWriter(fstream);
-  						    out.write(positionName + ":" + latlng[0] + "," + latlng[1] + "\n");
-  						    savedPositionList.addItem(new String(positionName + ": " +latlng[0] + ", " +latlng[1]));
+  						    out.write(positionName + ": " + latlng[0] + ", " + latlng[1] + "\n");
+  						    savedPositionList.addItem(new String(positionName + ": " + latlng[0] + ", " + latlng[1]));
   						    //Close the output stream
   						    out.close();
+  						    txtPositionName.setText("");
   						    popupWindow.setVisible(false);
   					    }
   					    catch(Exception ex)
@@ -656,7 +657,7 @@ private void initComponents() {
   				    if (e.getStateChange() == ItemEvent.SELECTED && savedPositionList.getSelectedIndex() != 0 ) // index 0: not a city name
   				    {
   					    String item = (String)savedPositionList.getSelectedItem();
-  					    item = item.substring(item.indexOf(":") + 1);
+  					    item = item.substring(item.indexOf(": ") + 2);
   					    String [] latlng = item.split(", ");
   					    ttfLat.setText(latlng[0]);
   					    ttfLon.setText(latlng[1]);
