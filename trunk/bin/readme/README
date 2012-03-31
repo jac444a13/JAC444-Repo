@@ -1,0 +1,41 @@
+Google Maps Application (Application #1)
+
+Team Members:
+Ronson Wan
+Ramone Raburrell
+Anatoly Specktors
+
+After creating the JAR files, I've imported the JAR files into Eclipse again. I've checked that there's no compilation error.
+
+Importing JAR files:
+1. Open Eclipse.
+2. Create a new Java Project. (File -> New -> Java Project)
+3. Name the project.
+4. Make sure execution environment JRE is "JavaSE-1.6" and click "OK".
+5. Expand the project and find a folder called "src".
+6. Right click on the folder "src" and select "Import".
+7. Under "General", select "Archive File" and click "Next".
+8. Click the "Browse..." button for "From archive file:" and select the JAR file you want to import.
+9. Click "Finish".
+
+Importing Reference Libraries JAR files:
+1. Right click on the folder of the project.
+2. Under "Build Path", select "Add External Archives...".
+3. Select the JAR file and click "Open".
+4. Repeat steps for each JAR file.
+
+Running the application:
+Note:  	All referenced libraries should be included too properly run the application (follow above steps to import them)
+	Import taskapi.jar should import all required JAR files, but if not please include the following:
+	*All found in the geoip_serivice/lib folder
+		TableLayout.jar
+		commons-httpclient-3.1.jar
+		commons-lang-2.4.jar
+		looks-2.1.4.jar
+		appicons.zip
+		forms-1.2.0.jar
+		commons-logging-1.1.1.jar
+		swingx-0.9.2.jar
+		taskapi.jar
+1. Under "Provider.GoogleMapsStatic.TestUI", double click and open "SampleApp.java"
+2. Press the green play button on the toolbar.

@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -293,6 +294,12 @@ private void quitProgram() {
   System.exit(0);
 }
 
+/**
+ * Read a file and stores each line of text into an array
+ * @param filename
+ * @return an array of strings
+ * @throws IOException
+ */
 public String[] getLines(String filename) throws IOException {
     
     FileReader fileReader = new FileReader(filename);
@@ -307,6 +314,15 @@ public String[] getLines(String filename) throws IOException {
     return lines.toArray(new String[lines.size()]);
 }
 
+/**
+ * Improved GUI within this method which include:
+ *     Zoom in and out buttons (+ and -)
+ *     Latitude increase and decrease buttons (+ and -)
+ *     Longitude increase and decrease buttons (+ and -)
+ * 	   Drop down list of bookmarks (saved positions) and major cities
+ *     Save position button, which is updated in the bookmarks list (also stored in a txt file, which is reloaded on running the application)
+ *          A dialog box appeared when pressed to ask user for a bookmark name (an error dialog box appears if name is empty)
+ */
 private void initComponents() {
   // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
   // Generated using JFormDesigner non-commercial license
@@ -326,6 +342,7 @@ private void initComponents() {
   label1 = new JLabel();
   ttfLicense = new JTextField();
   label6 = new JLabel();
+  // ---- Added GUI ----
   ttfZoom = new JTextField();
   btnZoomIn = new JButton();
   btnZoomOut = new JButton();
@@ -338,9 +355,9 @@ private void initComponents() {
   btnSavePosition = new JButton();
   txtPositionName = new JTextField(20);
   btnSaveDone = new JButton();
-  btnSaveDone = new JButton();
   btnSavePosition = new JButton();
   panelList = new JPanel();
+  // ---- End of added GUI
   scrollPane1 = new JScrollPane();
   ttaStatus = new JTextArea();
   panel2 = new JPanel();
@@ -351,6 +368,7 @@ private void initComponents() {
   progressBar = new JProgressBar();
   lblProgressStatus = new JLabel();
 
+  //Load text file for saved positions
   try
   {
 	  savedPositionList = new JComboBox(getLines("savedpositions.txt"));
@@ -493,6 +511,8 @@ private void initComponents() {
   			panel1.add(ttfZoom, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
   			ttfZoom.setEditable(false);
   			
+  			//--------------------------------------------- OUR CODE STARTS HERE ---------------------------------------------
+  			
   			//---- btnZoomOut ----
   			btnZoomOut.setText("-");
   			btnZoomOut.addActionListener(new ActionListener(){
@@ -524,7 +544,7 @@ private void initComponents() {
   		    btnLatDecr.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e)
 			    {
-				    BigDecimal temp = new BigDecimal( new Double(ttfLat.getText()));
+				    BigDecimal temp = new BigDecimal(new Double(ttfLat.getText()));
 				    if(temp.doubleValue() >= -88.9999999999999)
 				    {
 					    temp = new BigDecimal(temp.doubleValue() - 1);
@@ -540,7 +560,7 @@ private void initComponents() {
   		    btnLatIncr.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e)
 			    {
-				    BigDecimal temp = new BigDecimal( new Double(ttfLat.getText()));
+				    BigDecimal temp = new BigDecimal(new Double(ttfLat.getText()));
 				    if(temp.doubleValue() <= 89)
 				    {
 					    temp = new BigDecimal(temp.doubleValue() + 1);
@@ -556,7 +576,7 @@ private void initComponents() {
   		    btnLongDecr.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e)
 			    {
-				    BigDecimal temp = new BigDecimal( new Double(ttfLon.getText()));
+				    BigDecimal temp = new BigDecimal(new Double(ttfLon.getText()));
 				    if(temp.doubleValue() >= -179)
 				    {
 					    temp = new BigDecimal(temp.doubleValue() - 1);
@@ -572,7 +592,7 @@ private void initComponents() {
   		    btnLongIncr.addActionListener(new ActionListener() {
 			    public void actionPerformed(ActionEvent e)
 			    {
-				    BigDecimal temp = new BigDecimal( new Double(ttfLon.getText()));
+				    BigDecimal temp = new BigDecimal(new Double(ttfLon.getText()));
 				    if(temp.doubleValue() <= 179)
 				    {
 				 	    temp = new BigDecimal(temp.doubleValue() + 1);
@@ -586,7 +606,7 @@ private void initComponents() {
   		    //---- btnSavePosition ----
   		    btnSavePosition.setText("Save Position");            
   		    btnSavePosition.addActionListener(new ActionListener() {
-  			    public void actionPerformed( ActionEvent e )
+  			    public void actionPerformed(ActionEvent e)
   			    {
   				    // set popup window visibility
   				    if (!popupWindow.isVisible()) {
@@ -632,7 +652,7 @@ private void initComponents() {
   				    {
   					    try
   					    {
-  						    String [] latlng = {ttfLat.getText(),ttfLon.getText()};
+  						    String [] latlng = {ttfLat.getText(), ttfLon.getText()};
   						    FileWriter fstream = new FileWriter("savedpositions.txt",true);
   						    BufferedWriter out = new BufferedWriter(fstream);
   						    out.write(positionName + ": " + latlng[0] + ", " + latlng[1] + "\n");
@@ -651,12 +671,12 @@ private void initComponents() {
   		    });
 	          
   		    //---- savedPositionList ----
-  		    savedPositionList.addItemListener( new ItemListener() {
+  		    savedPositionList.addItemListener(new ItemListener() {
   			    public void itemStateChanged(ItemEvent e) // triggered by a selection
   			    {
   				    if (e.getStateChange() == ItemEvent.SELECTED && savedPositionList.getSelectedIndex() != 0 ) // index 0: not a city name
   				    {
-  					    String item = (String)savedPositionList.getSelectedItem();
+  					    String item = (String) savedPositionList.getSelectedItem();
   					    item = item.substring(item.indexOf(": ") + 2);
   					    String [] latlng = item.split(", ");
   					    ttfLat.setText(latlng[0]);
@@ -669,9 +689,9 @@ private void initComponents() {
   		    panelList.add(savedPositionList, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));  
   		    
   		    //---- cityCombo ----
-  		    String [] cityList = {"Select City..", "Tirana", "Andorra la Vella", "Vienna", "Minsk", "Bruxelles ", "Sarajevo ", "Sofia", "Zagreb", "Praha", "Kobenhavn", "Tallinn", "Helsinki", "Paris", "Berlin", "Athinai", "Budapest", "Reykjavik", "Dublin", "Rome", "Riga", "Vaduz", "Vilnius", "Luxembourg", "Skopje", "Valletta", "Chisinau", "Monaco", "Podgorica", "Amsterdam", "Oslo", "Warsaw", "Lisbon", "Bucharest", "Moscow", "San Marino", "Belgrade", "Bratislava", "Ljubljana",
+  		    String [] cityListU = {"Tirana", "Andorra la Vella", "Vienna", "Minsk", "Bruxelles ", "Sarajevo ", "Sofia", "Zagreb", "Praha", "Kobenhavn", "Tallinn", "Helsinki", "Paris", "Berlin", "Athinai", "Budapest", "Reykjavik", "Dublin", "Rome", "Riga", "Vaduz", "Vilnius", "Luxembourg", "Skopje", "Valletta", "Chisinau", "Monaco", "Podgorica", "Amsterdam", "Oslo", "Warsaw", "Lisbon", "Bucharest", "Moscow", "San Marino", "Belgrade", "Bratislava", "Ljubljana",
   				"Madrid", "Stockholm", "Bern", "Kiev", "London", "Torshavn (on Streymoy)", "Gibraltar", "Saint Peter Port", "Douglas", "Saint Helier", "Prishtine", "Longyearbyen", "Kabul", "Yerevan", "Baku", "Manama", "Dhaka", "Thimphu", "Bandar Seri Begawan", "Phnom Penh", "Beijing", "Nicosia", "T'bilisi", "New Delhi", "Jakarta (on Java)", "Teheran", "Baghdad", "Jerusalem", "Tokyo",
-  				"Amman", "Astana", "Kuwait", "Bishkek", "VVientiane", "Beirut", "Kuala Lumpur", "Male (on Male)", "Ulan Bator", "Pyinmana", "Kathmandu", "P'yongyang", "Muscat", "Islamabad", "Manila", "Ad Doha",
+  				"Amman", "Astana", "Kuwait", "Bishkek", "VVientiane", "Beirut", "Kuala Lumpur", "Male (on Male)", "Ulan Bator", "Pyinmana", "Kathmandu", "P'yongyang", "Muscat", "Islamabad", "Manila",
   				"Riyadh", "Singapore", "Seoul", "Colombo", "Damascus", "Dushanbe", "Bangkok", "Dili", "Ankara", "Ashgabat", "Abu Dhabi", "TTashkent", "Hanoi", "Sanaa", "Taipei", "Saint John's (on Antigua)", "Buenos Aires", "Nassau (on New Providence)", "Bridgetown", "Belmopan", "Sucre", "Brasilia", "Ottawa", "Santiago", "Bogota", "San Jose", "Havana", "Roseau", "Santo Domingo", "Quito", "San Salvador", "Saint George's", "Guatemala", "Georgetown", "Port-au-Prince",
   				"Tegucigalpa", "Kingston", "Ciudad de Mexico", "Managua", "Panama", "Asuncion", "Lima", "Basseterre (on St. Kitts)", "Castries", "Kingstown (on St. Vincent)", "Paramaribo", "Port of Spain (on Trinidad)",
   				"Washington", "Montevideo", "Caracas", "The Valley", "Oranjestad", "Hamilton (on Main Island)", "Road Town (on Tortola)", "George Town (on Grand Cayman)", "Stanley (on East Falkland)", "Cayenne", "Nuuk", "Basse-Terre", "Fort-de-France", "Plymouth", "Willemstad (on Curacao)", "San Juan", "Saint-Pierre (on St. Pierre)", "Cockburn Town (on Grand Turk)", "Charlotte Amalie (on St. Thomas)", "Algiers", "Luanda", "Porto-Novo", "Gaborone", "Ouagadougou", "Bujumbura",
@@ -679,11 +699,12 @@ private void initComponents() {
   				"Saint Denis", "Jamestown", "El Aaiun",
   				"Canberra", "Suva (on Viti Levu)", "Bairiki (on Tarawa)", "Dalap-Uliga-Darrit (on Majuro)", "Palikir (on Pohnpei)", "Yaren", "Wellington", "Melekeok (on Babelthuap)", "Port Moresby", "Apia (on Upolu)", "Honiara (on Guadalcanal)", "Nuku'alofa (on Tongatapu)", "Vaiaku (on Funafuti)", "Port Vila (on Efate)", "Pago Pago (on Tutuila)", "Flying Fish Cove", "West Island", "Avarua (on Rarotonga)", "Papeete (on Tahiti)", "Hagatna", "Noumea (on Grande Terre)", "Alofi", "Kingston", "Garapan (on Saipan)", "Adamstown (on Pitcairn)", "Mata-Utu (on Wallis)", "Montgomery", "Juneau", "Phoenix", "Little Rock", "Sacramento", "Denver", "Hartford", "Dover", "Tallahassee", "Atlanta", "Honolulu (on Oahu)", "Boise", "Springfield",
   				"Indianapolis", "Des Moines", "Topeka", "Frankfort", "Baton Rouge", "Augusta", "Annapolis", "Boston", "Lansing", "Saint Paul", "Jackson", "Jefferson City", "Helena", "Lincoln", "Carson City", "Concord", "Trenton", "Santa Fe", "Albany", "Raleigh", "Bismarck", "Columbus", "Oklahoma City", "Salem", "Harrisburg", "Providence", "Columbia", "Pierre", "Nashville", "Austin", "Salt Lake City", "Montpelier", "Richmond", "Olympia", "Charleston", "Madison", "Cheyenne"
-
-
   				};
-  			java.util.Arrays.sort(cityList);
-
+  		    
+  		    ArrayList<String> cityList = new ArrayList<String>(Arrays.asList(cityListU));		 
+		    java.util.Collections.sort(cityList);
+		    cityList.add(0,"Select City..");
+		    
   			cityDetails.put("Select City..", "0:37.0");
   			cityDetails.put("Tirana","41.3317:19.8172");
   			cityDetails.put("Andorra la Vella","42.5075:1.5218");
@@ -968,7 +989,7 @@ private void initComponents() {
   			cityDetails.put("Charleston","38.3533:-81.6354");
   			cityDetails.put("Madison","43.0632:-89.4007");
   			cityDetails.put("Cheyenne","41.1389:-104.8165");
-			cityCombo = new JComboBox(cityList);
+			cityCombo = new JComboBox(cityList.toArray());
 
   			cityCombo.addActionListener(new ActionListener(){
   				public void actionPerformed(ActionEvent e){
@@ -981,6 +1002,8 @@ private void initComponents() {
   			panelList.add(cityCombo, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));  
   		}
   		contentPanel.add(panelList, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstraints.FULL, TableLayoutConstraints.FULL));
+  		
+  		//--------------------------------------------- OUR CODE ENDS HERE ---------------------------------------------
   		
   		//======== scrollPane1 ========
   		{
@@ -1073,6 +1096,7 @@ private JLabel label1;
 private JTextField ttfLicense;
 private JLabel label6;
 private JTextField ttfZoom;
+// ---- Added GUI
 private JButton btnZoomOut;
 private JButton btnZoomIn;
 private JButton btnLatDecr;
@@ -1087,6 +1111,7 @@ private JPanel panelList;
 private JComboBox cityCombo;
 private JTextField txtPositionName;
 private JButton btnSaveDone;
+// ---- End of added GUI ----
 private JScrollPane scrollPane1;
 private JTextArea ttaStatus;
 private JPanel panel2;
