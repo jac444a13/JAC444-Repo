@@ -25,7 +25,7 @@ Importing Reference Libraries JAR files:
 4. Repeat steps for each JAR file.
 
 Running the application:
-Note:  	All referenced libraries should be included too properly run the application (follow above steps to import them)
+Note: All referenced libraries should be included too properly run the application (follow above steps to import them)
 	Import taskapi.jar should import all required JAR files, but if not please include the following:
 	*All found in the geoip_serivice/lib folder
 		TableLayout.jar
